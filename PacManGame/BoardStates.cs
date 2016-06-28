@@ -4,6 +4,8 @@ namespace PacManGame
     {
         WALL,
         PILL,
+        TUNNEL,
         EMPTY
+
     }
 }

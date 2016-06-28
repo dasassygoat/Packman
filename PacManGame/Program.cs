@@ -31,7 +31,7 @@ namespace PacManGame
                 }
                 Console.WriteLine();
                 Console.WriteLine(game.present());
-                Thread.Sleep(4000);
+                Thread.Sleep(2000);
             }
         }
     }

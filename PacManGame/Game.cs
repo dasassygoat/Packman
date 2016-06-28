@@ -18,8 +18,8 @@ namespace PacManGame
             mPacMansPosition = new Coordinate(1, 1);
             //add monsters
             mMonsterPosition1 = new Coordinate(8, 8);
-            mMonsterPosition2 = new Coordinate(8, 10);
-            mMonsterPosition3 = new Coordinate(8, 12);
+            mMonsterPosition2 = new Coordinate(10, 10);
+            mMonsterPosition3 = new Coordinate(12, 12);
 
 
         }
@@ -55,6 +55,15 @@ namespace PacManGame
             {
                 // dont move him
             }
+            else if (mBoard.GetState(newPosition) == BoardStates.TUNNEL)
+            {
+                //find the other end of the tunnel
+
+
+                newPosition = new Coordinate(15, 15);
+                mPacMansPosition = newPosition;
+                mBoard.Eat(newPosition);
+            }
             else
             {
                 mPacMansPosition = newPosition;
@@ -78,7 +87,8 @@ namespace PacManGame
             mMonsterPosition2 = MoveMonster(mMonsterPosition2);
             mMonsterPosition3 = MoveMonster(mMonsterPosition3);
 
-            if (mPacMansPosition.toString().Equals(mMonsterPosition1.toString()))
+            //check all of the monster positions
+            if (mPacMansPosition.toString().Equals(mMonsterPosition1.toString()) || mPacMansPosition.toString().Equals(mMonsterPosition2.toString()) || mPacMansPosition.toString().Equals(mMonsterPosition3.toString()))
             {
                 mGameOver = true;
                 mWon = false;

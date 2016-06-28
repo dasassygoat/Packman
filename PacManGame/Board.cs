@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PacManGame
@@ -12,34 +13,34 @@ namespace PacManGame
         public Board()
         {
             map = new Dictionary<string, BoardStates>();
-            convertToMap("####################");
-            convertToMap("# *****************#");
-            convertToMap("####**##*#********##");
-            convertToMap("#********######****#");
-            convertToMap("#*#****#*##********#");
-            convertToMap("#*#****#*##**#****##");
-            convertToMap("#******************#");
-            convertToMap("#*##**#######*######");
-            convertToMap("#******************#");
-            convertToMap("#******************#");
-            convertToMap("#******************#");
-            convertToMap("#******************#");
-            convertToMap("#*##**##*#********##");
-            convertToMap("#********######****#");
-            convertToMap("#*#*##*#*##********#");
-            convertToMap("#*#*##*#*##**#****##");
-            convertToMap("#******************#");
-            convertToMap("#*##**#######*######");
-            convertToMap("#******************#");
-            convertToMap("####################");
+            ConvertToMap("####################");
+            ConvertToMap("# *****************#");
+            ConvertToMap("####**##T#********##");
+            ConvertToMap("#********######****#");
+            ConvertToMap("#*#****#*##********#");
+            ConvertToMap("#*#****#*##**#****##");
+            ConvertToMap("#******************#");
+            ConvertToMap("#*##**###*****#****#");
+            ConvertToMap("#******************#");
+            ConvertToMap("#******************#");
+            ConvertToMap("#******************#");
+            ConvertToMap("#******************#");
+            ConvertToMap("#*##**##*#********##");
+            ConvertToMap("#********######****#");
+            ConvertToMap("#*#****#*#*********#");
+            ConvertToMap("#*#*##*#*##**#*T**##");
+            ConvertToMap("#******************#");
+            ConvertToMap("#*##**#######*######");
+            ConvertToMap("#******************#");
+            ConvertToMap("####################");
         }
 
-        private int lineCount = 0;
-        private void convertToMap(string pMapString)
+        private int _lineCount = 0;
+        private void ConvertToMap(string pMapString)
         {
             for (int i = 0; i < pMapString.Length; i++)
             {
-                Coordinate coordinate = new Coordinate(i, lineCount);
+                Coordinate coordinate = new Coordinate(i, _lineCount);
                 BoardStates state;
                 if (pMapString[i].Equals('#'))
                 {
@@ -49,6 +50,10 @@ namespace PacManGame
                 {
                     state = BoardStates.PILL;
                 }
+                else if (pMapString[i].Equals('T'))
+                {
+                    state = BoardStates.TUNNEL;
+                }
                 else
                 {
                     state = BoardStates.EMPTY;
@@ -56,7 +61,7 @@ namespace PacManGame
                 map.Add(coordinate.toString(), state);
             }
 
-            lineCount++;
+            _lineCount++;
         }
 
         public string ToString(Coordinate pPacMan, Coordinate pMonster1, Coordinate pMonster2, Coordinate pMonster3, bool pPacLives = true)
@@ -71,6 +76,7 @@ namespace PacManGame
             //M = Monster
             //# = Wall
             //* = Pill
+            //T = Tunnel
             foreach (KeyValuePair<string, BoardStates> boardStatese in map)
             {
                 string character = "";
@@ -99,6 +105,10 @@ namespace PacManGame
                 else if (boardStatese.Value == BoardStates.WALL)
                 {
                     character = "#";
+                }
+                else if (boardStatese.Value == BoardStates.TUNNEL)
+                {
+                    character = "T";
                 }
                 else if (boardStatese.Value == BoardStates.PILL)
                 {
@@ -133,14 +143,7 @@ namespace PacManGame
         //checks to see if any pills are still on the map
         public bool AreAllPillsEaten()
         {
-            foreach (var i in map)
-            {
-                if (i.Value == BoardStates.PILL)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return map.All(i => i.Value != BoardStates.PILL);
         }
     }
 
